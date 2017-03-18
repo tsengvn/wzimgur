@@ -1,0 +1,3 @@
+# wzimgur
+
+ImgUr API wrapper
