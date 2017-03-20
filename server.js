@@ -5,6 +5,8 @@ var imgur = require("./imgur")
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
+const hostname = 'localhost'
+const port = process.env.PORT || 3000 
 
 app.get('/', function (req, res) {
 	res.send('Hello to the Challenge')
@@ -23,7 +25,7 @@ app.post('/image', multipartMiddleware, function (req, res) {
 	imgur.post_image(req, res)
 });
 
-var server = app.listen(8081, function (){
+var server = app.listen(port, function (){
 	var host = server.address().address
 	var port = server.address().port
 
