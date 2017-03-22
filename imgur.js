@@ -45,8 +45,8 @@ var post_image = function (req, res) {
 	login(function(loginErr, loginRes) {
 		console.log(loginRes.body)
 		saveToken(loginRes.body.access_token, loginRes.body.refresh_token)
-		
-		superagent
+		try {
+			superagent
 			.post(END_POINT + "image/")
 			.attach('image', req.files.file.path)
 			.field('album', ALBUM_ID)
@@ -61,6 +61,11 @@ var post_image = function (req, res) {
 		       		res.send(res2.body)
 		     	}
 		   	});
+		} catch (err) {
+			console.log('post_image : error ' + err)
+			res.send(err)
+		}
+		
 	});
 	
 };
