@@ -9,7 +9,7 @@ var app = express();
 var multipartMiddleware = multipart();
 
 const hostname = 'localhost'
-const port = process.env.PORT || 3000 
+const port = process.env.PORT || 3000
 
 passport.use(new Strategy(
   function(token, cb) {
@@ -29,7 +29,7 @@ app.get('/', function (req, res) {
 
 app.post('/login', multipartMiddleware, function (req, res){
 	db.users.findByUsername(req.body.username, function(err, user) {
-      	if (!user) { 
+      	if (!user) {
       		res.status(400);
       		res.send(null);
       	} else {
@@ -44,6 +44,10 @@ app.get('/image', passport.authenticate('bearer', { session: false }), function 
 
 app.get('/image/:imageid', passport.authenticate('bearer', { session: false }), function(req, res) {
 	imgur.get_image(req, res)
+});
+
+app.get('/thumnail', passport.authenticate('bearer', { session: false }), function(req, res) {
+  imgur.get_thumbnail(req, res)
 });
 
 app.post('/image', passport.authenticate('bearer', { session: false }), multipartMiddleware, function (req, res) {

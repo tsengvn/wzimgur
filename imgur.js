@@ -1,6 +1,7 @@
 var superagent = require('superagent');
 var fs = require('fs');
 var nconf = require('nconf');
+var url = require('url');
 
 const END_POINT = 'https://api.imgur.com/3/';
 const CLIENT_ID = 'Client-ID 93f99ef66435292';
@@ -65,9 +66,9 @@ var post_image = function (req, res) {
 			console.log('post_image : error ' + err)
 			res.send(err)
 		}
-		
+
 	});
-	
+
 };
 
 var login = function (callback) {
@@ -96,6 +97,26 @@ var getToken = function () {
 	return nconf.get('access_token');
 }
 
+var get_thumbnail = function (req, res) {
+	var query = url.parse(req.url, true).query;
+
+	// console.log(query.imageId)
+	// console.log(query)
+
+	superagent
+		.get("http://i.imgur.com/" + query.imageId + query.size + ".jpeg")
+		.end(function(err, res2){
+	     	if (err || !res2.ok) {
+	     		console.log('get_thumbnail : error ' + err)
+	     		res.send(err)
+	     	} else {
+	     		console.log('get_thumbnail : success')
+	       	res.send(res2.body)
+	     	}
+	   	});
+}
+
 module.exports.get_public = get_public;
 module.exports.get_image = get_image;
 module.exports.post_image = post_image;
+module.exports.get_thumbnail = get_thumbnail;
