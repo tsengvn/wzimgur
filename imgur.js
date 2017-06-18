@@ -13,7 +13,7 @@ nconf.load();
 
 var get_public = function (req, res) {
 	superagent
-		.get(END_POINT + 'album/' + ALBUM_ID + '/images')
+		.get(END_POINT + 'album/' + ALBUM_ID + '/images?sort=time')
 		.set('Authorization', CLIENT_ID)
 		.end(function(err, res2){
 	     	if (err || !res2.ok) {
@@ -42,15 +42,28 @@ var get_image = function (req, res) {
 };
 
 var post_image = function (req, res) {
-	console.log(req.files);
+	console.log(req);
 	login(function(loginErr, loginRes) {
 		console.log(loginRes.body)
 		saveToken(loginRes.body.access_token, loginRes.body.refresh_token)
+
+		title = req.body.title
+		if (!title) {
+			title = 'No title'
+		}
+
+		description = req.body.description
+		if (!description) {
+			description = 'No description'
+		}
+
 		try {
 			superagent
 			.post(END_POINT + "image/")
 			.attach('image', req.files.file.path)
 			.field('album', ALBUM_ID)
+			.field('title', title)
+			.field('description', description)
 			.set('Authorization', "Bearer " + getToken())
 			.end(function(err, res2){
 				fs.unlink(req.files.file.path)
@@ -64,6 +77,7 @@ var post_image = function (req, res) {
 		   	});
 		} catch (err) {
 			console.log('post_image : error ' + err)
+			res.statusCode = 400;
 			res.send(err)
 		}
 
