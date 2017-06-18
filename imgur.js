@@ -125,6 +125,7 @@ var get_thumbnail = function (req, res) {
 	     		res.send(err)
 	     	} else {
 	     		console.log('get_thumbnail : success')
+					res.setHeader('content-type', 'image/jpeg');
 	       	res.send(res2.body)
 	     	}
 	   	});
