@@ -46,7 +46,7 @@ app.get('/image/:imageid', passport.authenticate('bearer', { session: false }), 
 	imgur.get_image(req, res)
 });
 
-app.get('/thumnail', passport.authenticate('bearer', { session: false }), function(req, res) {
+app.get('/thumbnail', function(req, res) {
   imgur.get_thumbnail(req, res)
 });
 
